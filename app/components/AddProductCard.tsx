@@ -36,6 +36,7 @@ function AddProductCard({
       title: string;
       variants:
         | {
+            index: number;
             size: string;
             color: string;
             price: string;
@@ -59,6 +60,7 @@ function AddProductCard({
     rating: { rate: number; count: number };
     title: string;
     variants: {
+      index: number;
       size: string;
       color: string;
       price: string;
@@ -144,6 +146,7 @@ function AddProductCard({
                   title: string;
                   variants:
                     | {
+                        index: number;
                         size: string;
                         color: string;
                         price: string;

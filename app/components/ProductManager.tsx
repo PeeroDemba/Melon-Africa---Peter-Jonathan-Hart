@@ -28,6 +28,7 @@ function ProductManager({
         title: string;
         variants:
           | {
+              index: number;
               size: string;
               color: string;
               price: string;

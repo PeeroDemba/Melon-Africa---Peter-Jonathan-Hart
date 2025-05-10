@@ -12,6 +12,7 @@ This project is built with the following technologies:
 - React Query
 - Shadcn UI
 - TypeScript
+- React Hook Form
 
 - **Deployment**:
   - Vercel

@@ -10,7 +10,7 @@ import {
 } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
 import { Plus, SquarePen, Trash2, Trash2Icon } from "lucide-react";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import AddVariantCard from "./AddVariantCard";
 import EditVariantCard from "./EditVariantCard";
 
@@ -31,6 +31,7 @@ function ProductCard({
     title: string;
     variants:
       | {
+          index: number;
           size: string;
           color: string;
           price: string;
@@ -43,6 +44,7 @@ function ProductCard({
   setEditVariantCardOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [productIndex, setProductIndex] = useState(0);
+  const [variantIndex, setVariantIndex] = useState(0);
 
   return (
     <>
@@ -50,14 +52,19 @@ function ProductCard({
         <div className="fixed top-0 px-4 left-0 w-full h-full backdrop-blur-[4px] bg-black/50 flex justify-center items-center">
           <AddVariantCard
             data={data}
-            index={productIndex}
+            productIndex={productIndex}
             setVariantCardOpen={setVariantCardOpen}
           />
         </div>
       )}
       {editVariantCardOpen && (
         <div className="fixed top-0 px-4 left-0 w-full h-full backdrop-blur-[4px] bg-black/50 flex justify-center items-center">
-          <EditVariantCard setEditVariantCardOpen={setEditVariantCardOpen} />
+          <EditVariantCard
+            data={data}
+            variantIndex={variantIndex}
+            productIndex={productIndex}
+            setEditVariantCardOpen={setEditVariantCardOpen}
+          />
         </div>
       )}
       <Card className="max-w-[450px] w-full">
@@ -108,7 +115,10 @@ function ProductCard({
                             {e.size}
                           </p>
                           <p
-                            className={`h-[20px] w-[20px] bg-${e.color}-600  rounded-full`}
+                            className="h-[20px] w-[20px] rounded-full"
+                            style={{
+                              backgroundColor: e.color,
+                            }}
                           ></p>
                         </div>
                         <p>₦{e.price}</p>
@@ -117,6 +127,8 @@ function ProductCard({
                         <Button
                           onClick={() => {
                             setEditVariantCardOpen(true);
+                            setVariantIndex(e.index);
+                            setProductIndex(data.id);
                           }}
                           variant="icon"
                         >

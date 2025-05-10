@@ -18,11 +18,12 @@ import { Label } from "~/components/ui/label";
 import { Button } from "~/components/ui/button";
 import { X } from "lucide-react";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 
 function AddVariantCard({
   setVariantCardOpen,
   data,
-  index,
+  productIndex,
 }: {
   setVariantCardOpen: React.Dispatch<React.SetStateAction<boolean>>;
   data: {
@@ -35,17 +36,28 @@ function AddVariantCard({
     title: string;
     variants:
       | {
+          index: number;
           size: string;
           color: string;
           price: string;
         }[]
       | null;
   };
-  index: number;
+  productIndex: number;
 }) {
-  const [size, setSize] = useState("");
-  const [color, setColor] = useState("");
-  const [price, setPrice] = useState("");
+  const { register, watch, setValue } = useForm({
+    defaultValues: {
+      size: "",
+      color: "",
+      price: "",
+    },
+  });
+
+  const size = watch("size");
+  const color = watch("color");
+  const price = watch("price");
+
+  console.log(productIndex);
 
   return (
     <Card className="max-w-[450px] w-full">
@@ -72,7 +84,7 @@ function AddVariantCard({
               <Label htmlFor="size">Size</Label>
               <Select
                 onValueChange={(v) => {
-                  setSize(v);
+                  setValue("size", v);
                 }}
               >
                 <SelectTrigger id="size" className="w-full !h-10">
@@ -92,7 +104,7 @@ function AddVariantCard({
               <Label htmlFor="color">Color</Label>
               <Select
                 onValueChange={(v) => {
-                  setColor(v);
+                  setValue("color", v);
                 }}
               >
                 <SelectTrigger id="color" className="w-full !h-10">
@@ -100,48 +112,93 @@ function AddVariantCard({
                 </SelectTrigger>
                 <SelectContent position="popper" className="bg-[#030712]">
                   <SelectItem value="red" className="flex items-center gap-2">
-                    <span className="h-[20px] w-[20px] bg-red-600 rounded-full"></span>
+                    <span
+                      className="h-[20px] w-[20px] rounded-full"
+                      style={{
+                        backgroundColor: "red",
+                      }}
+                    ></span>
                     <span>Red</span>
                   </SelectItem>
                   <SelectItem value="blue" className="flex items-center gap-2">
-                    <span className="h-[20px] w-[20px] bg-blue-600 rounded-full"></span>
+                    <span
+                      className="h-[20px] w-[20px] rounded-full"
+                      style={{
+                        backgroundColor: "blue",
+                      }}
+                    ></span>
                     <span>Blue</span>
                   </SelectItem>
                   <SelectItem value="green" className="flex items-center gap-2">
-                    <span className="h-[20px] w-[20px] bg-green-600 rounded-full"></span>
+                    <span
+                      className="h-[20px] w-[20px] rounded-full"
+                      style={{
+                        backgroundColor: "green",
+                      }}
+                    ></span>
                     <span>Green</span>
                   </SelectItem>
                   <SelectItem value="black" className="flex items-center gap-2">
-                    <span className="h-[20px] w-[20px] bg-black rounded-full"></span>
+                    <span
+                      className="h-[20px] w-[20px] rounded-full"
+                      style={{
+                        backgroundColor: "black",
+                      }}
+                    ></span>
                     <span>Black</span>
                   </SelectItem>
                   <SelectItem value="white" className="flex items-center gap-2">
-                    <span className="h-[20px] w-[20px] bg-white rounded-full"></span>
+                    <span
+                      className="h-[20px] w-[20px] rounded-full"
+                      style={{
+                        backgroundColor: "white",
+                      }}
+                    ></span>
                     <span>White</span>
                   </SelectItem>
                   <SelectItem
                     value="yellow"
                     className="flex items-center gap-2"
                   >
-                    <span className="h-[20px] w-[20px] bg-yellow-600 rounded-full"></span>
+                    <span
+                      className="h-[20px] w-[20px] rounded-full"
+                      style={{
+                        backgroundColor: "yellow",
+                      }}
+                    ></span>
                     <span>Yellow</span>
                   </SelectItem>
                   <SelectItem
                     value="purple"
                     className="flex items-center gap-2"
                   >
-                    <span className="h-[20px] w-[20px] bg-purple-600 rounded-full"></span>
+                    <span
+                      className="h-[20px] w-[20px] rounded-full"
+                      style={{
+                        backgroundColor: "purple",
+                      }}
+                    ></span>
                     <span>Purple</span>
                   </SelectItem>
                   <SelectItem
                     value="orange"
                     className="flex items-center gap-2"
                   >
-                    <span className="h-[20px] w-[20px] bg-orange-600 rounded-full"></span>
+                    <span
+                      className="h-[20px] w-[20px] rounded-full"
+                      style={{
+                        backgroundColor: "orange",
+                      }}
+                    ></span>
                     <span>Orange</span>
                   </SelectItem>
                   <SelectItem value="pink" className="flex items-center gap-2">
-                    <span className="h-[20px] w-[20px] bg-pink-600 rounded-full"></span>
+                    <span
+                      className="h-[20px] w-[20px] rounded-full"
+                      style={{
+                        backgroundColor: "pink",
+                      }}
+                    ></span>
                     <span>Pink</span>
                   </SelectItem>
                 </SelectContent>
@@ -154,10 +211,7 @@ function AddVariantCard({
                 placeholder="0"
                 type="number"
                 min={0}
-                onChange={(e) => {
-                  setPrice(e.target.value);
-                }}
-                value={price}
+                {...register("price")}
               />
             </div>
           </div>
@@ -177,6 +231,7 @@ function AddVariantCard({
                   title: string;
                   variants:
                     | {
+                        index: number;
                         size: string;
                         color: string;
                         price: string;
@@ -189,10 +244,10 @@ function AddVariantCard({
                 ? JSON.parse(localStorage.getItem("products")!)
                 : "";
             if (products && typeof products !== "string") {
-              const exact = products.some((e) => e.id === index);
+              const exact = products.some((e) => e.id === productIndex);
               if (exact) {
                 const filteredProducts = products.map((e) => {
-                  if (e.id === index) {
+                  if (e.id === productIndex) {
                     return {
                       category: e.category,
                       description: e.description,
@@ -209,6 +264,7 @@ function AddVariantCard({
                           ? [
                               ...e.variants,
                               {
+                                index: e.variants.length + 1,
                                 size,
                                 color,
                                 price,
@@ -216,6 +272,7 @@ function AddVariantCard({
                             ]
                           : [
                               {
+                                index: 1,
                                 size,
                                 color,
                                 price,

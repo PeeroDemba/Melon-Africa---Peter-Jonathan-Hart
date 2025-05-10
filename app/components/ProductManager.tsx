@@ -1,32 +1,37 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
 import { SearchAndFilterBar } from "./SearchAndFilterBar";
 
 function ProductManager() {
-  const [products, setProducts] = useState<any[]>([
-    {
-      name: "Food",
-    },
-    {
-      name: "Food",
-    },
-    {
-      name: "Food",
-    },
-    {
-      name: "Food",
-    },
-    {
-      name: "Food",
-    },
-    {
-      name: "Food",
-    },
-  ]);
+  const [products, setProducts] = useState<
+    | {
+        category: string;
+        description: string;
+        id: number;
+        image: string;
+        price: number;
+        rating: { rate: number; count: number };
+        title: string;
+      }[]
+    | null
+  >(() =>
+    localStorage.getItem("products") && localStorage.getItem("products") !== ""
+      ? JSON.parse(localStorage.getItem("products")!)
+      : null
+  );
+
+  // useEffect(() => {
+  //   setProducts(() =>
+  //     localStorage.getItem("products") &&
+  //     localStorage.getItem("products") !== ""
+  //       ? JSON.parse(localStorage.getItem("products")!)
+  //       : null
+  //   );
+  // });
 
   return (
     <>
-      {products.length < 1 ? (
+      {products === null ? (
         <div className="text-white border border-white mt-8 border-dashed rounded-lg h-40 flex justify-center items-center">
           <p>No products yet. Add your first product to get started.</p>
         </div>
@@ -50,8 +55,8 @@ function ProductManager() {
             minMaxPrice={[0, 9999999]}
           />
           <div className="mt-8 flex gap-x-12 gap-y-8 flex-wrap justify-evenly">
-            {products.map((_, i) => (
-              <ProductCard key={i} />
+            {products.map((e, i) => (
+              <ProductCard key={i} data={e} />
             ))}
           </div>
         </div>

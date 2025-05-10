@@ -6,23 +6,25 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select";
 import { Button } from "~/components/ui/button";
 import { Plus, SquarePen, Trash2, Trash2Icon, X } from "lucide-react";
-import { Textarea } from "./ui/textarea";
 import { useState } from "react";
 import AddVariantCard from "./AddVariantCard";
 import EditVariantCard from "./EditVariantCard";
 
-function ProductCard() {
+function ProductCard({
+  data,
+}: {
+  data: {
+    category: string;
+    description: string;
+    id: number;
+    image: string;
+    price: number;
+    rating: { rate: number; count: number };
+    title: string;
+  };
+}) {
   const [variantCardOpen, setVariantCardOpen] = useState(false);
   const [editVariantCardOpen, setEditVariantCardOpen] = useState(false);
   const [variants, setVariants] = useState<any[]>([
@@ -49,17 +51,20 @@ function ProductCard() {
       <Card className="max-w-[450px] w-full">
         <CardHeader>
           <CardTitle className="flex justify-between items-center">
-            <p className="text-[18px] text-white">Add Product</p>
+            <p className="text-[18px] text-white">{data.title}</p>
             <Button variant="icon">
               <Trash2 color="#ccc" />
             </Button>
           </CardTitle>
           <CardDescription className="text-[#ccc]">
-            Create a new product to add variants to your inventory.
+            {data.description}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid w-full items-center gap-4 text-[14px]">
+            <div>
+              <img src={data.image} alt={data.title} />
+            </div>
             <div className="flex font-medium justify-between items-center gap-4 text-white">
               <p>Variants</p>
               <div className="border rounded-full py-[2px] px-4">

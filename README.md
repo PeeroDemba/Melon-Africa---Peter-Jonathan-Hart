@@ -1,87 +1,128 @@
-# Welcome to React Router!
+# Project Name
 
-A modern, production-ready template for building full-stack React applications using React Router.
+A brief description of what this project does and who it's for.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+## Tech Stack
 
-## Features
+This project is built with the following technologies:
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+- React.js
+- Tailwind CSS
+- React Router (for routing)
+- React Query
+- Shadcn UI
+- TypeScript
 
-## Getting Started
+- **Deployment**:
+  - Vercel
+
+## Setup Instructions
+
+### Prerequisites
+
+Make sure you have the following installed on your machine:
+
+- Node.js (v16.x or higher)
+- npm (v8.x or higher) or yarn (v1.22.x or higher)
+- Git
 
 ### Installation
 
-Install the dependencies:
+1. Clone the repository
 
-```bash
-npm install
+   ```bash
+   git clone https://github.com/PeeroDemba/Melon-Africa---Peter-Jonathan-Hart.git
+   cd Melon-Africa---Peter-Jonathan-Hart
+   ```
+
+2. Install dependencies
+
+   ```bash
+   # Install dependencies
+   cd Melon-Africa---Peter-Jonathan-Hart
+   npm install
+   cd ..
+   ```
+
+3. Run the application
+
+   ```bash
+   # Run application
+   npm run dev
+   ```
+
+4. Access the application
+
+   - Frontend will be available at: `http://localhost:5173`
+
+## Screenshots/Demo
+
+### Adding Screenshots
+
+Add screenshots of your application here to showcase its features and UI.
+
+_Example:_
+
+![Dashboard](path/to/dashboard-screenshot.png)
+_Dashboard view showing key metrics and navigation_
+
+![User Profile](path/to/profile-screenshot.png)
+_User profile page with account settings_
+
+### Video Walkthrough
+
+Create a video walkthrough of your application to demonstrate how it works.
+
+1. Record a walkthrough using [Loom](https://www.loom.com/) or your preferred screen recording tool
+2. Add the link here:
+
+[Watch the video walkthrough](https://www.loom.com/share/your-video-id)
+
+_Alternatively, you can embed the video using:_
+
+```html
+<div style="position: relative; padding-bottom: 56.25%; height: 0;">
+  <iframe
+    src="https://www.loom.com/embed/your-video-id"
+    frameborder="0"
+    webkitallowfullscreen
+    mozallowfullscreen
+    allowfullscreen
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+  >
+  </iframe>
+</div>
 ```
 
-### Development
+## API Documentation
 
-Start the development server with HMR:
+If your project includes an API, document the endpoints here:
 
-```bash
-npm run dev
+### Authentication
+
+#### Register a new user
+
+- **URL**: `/api/auth/register`
+- **Method**: `POST`
+- **Body**:
+
+```json
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "securepassword123"
+}
 ```
 
-Your application will be available at `http://localhost:5173`.
+- **Response**:
 
-## Building for Production
-
-Create a production build:
-
-```bash
-npm run build
+```json
+{
+  "user": {
+    "id": "user_id",
+    "name": "John Doe",
+    "email": "john@example.com"
+  },
+  "token": "jwt_token"
+}
 ```
-
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
-
-```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
-```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
-
----
-
-Built with ❤️ using React Router.

@@ -34,6 +34,13 @@ function AddProductCard({
       price: number;
       rating: { rate: number; count: number };
       title: string;
+      variants:
+        | {
+            size: string;
+            color: string;
+            price: string;
+          }[]
+        | null;
     }[]
   >({
     queryKey: ["products"],
@@ -51,6 +58,11 @@ function AddProductCard({
     price: number;
     rating: { rate: number; count: number };
     title: string;
+    variants: {
+      size: string;
+      color: string;
+      price: string;
+    } | null;
   } | null>(null);
 
   return (
@@ -130,6 +142,13 @@ function AddProductCard({
                   price: number;
                   rating: { rate: number; count: number };
                   title: string;
+                  variants:
+                    | {
+                        size: string;
+                        color: string;
+                        price: string;
+                      }[]
+                    | null;
                 }[]
               | string =
               localStorage.getItem("products") &&

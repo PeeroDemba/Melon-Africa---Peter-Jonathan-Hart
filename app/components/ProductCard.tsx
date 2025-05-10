@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Card,
   CardContent,
@@ -7,13 +9,17 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
-import { Plus, SquarePen, Trash2, Trash2Icon, X } from "lucide-react";
-import { useState } from "react";
+import { Plus, SquarePen, Trash2, Trash2Icon } from "lucide-react";
+import { useContext, useState } from "react";
 import AddVariantCard from "./AddVariantCard";
 import EditVariantCard from "./EditVariantCard";
 
 function ProductCard({
   data,
+  editVariantCardOpen,
+  setEditVariantCardOpen,
+  variantCardOpen,
+  setVariantCardOpen,
 }: {
   data: {
     category: string;
@@ -23,24 +29,30 @@ function ProductCard({
     price: number;
     rating: { rate: number; count: number };
     title: string;
+    variants:
+      | {
+          size: string;
+          color: string;
+          price: string;
+        }[]
+      | null;
   };
+  variantCardOpen: boolean;
+  setVariantCardOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  editVariantCardOpen: boolean;
+  setEditVariantCardOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const [variantCardOpen, setVariantCardOpen] = useState(false);
-  const [editVariantCardOpen, setEditVariantCardOpen] = useState(false);
-  const [variants, setVariants] = useState<any[]>([
-    {
-      name: "Food",
-    },
-    {
-      name: "Food",
-    },
-  ]);
+  const [productIndex, setProductIndex] = useState(0);
 
   return (
     <>
       {variantCardOpen && (
         <div className="fixed top-0 px-4 left-0 w-full h-full backdrop-blur-[4px] bg-black/50 flex justify-center items-center">
-          <AddVariantCard setVariantCardOpen={setVariantCardOpen} />
+          <AddVariantCard
+            data={data}
+            index={productIndex}
+            setVariantCardOpen={setVariantCardOpen}
+          />
         </div>
       )}
       {editVariantCardOpen && (
@@ -51,7 +63,9 @@ function ProductCard({
       <Card className="max-w-[450px] w-full">
         <CardHeader>
           <CardTitle className="flex justify-between items-center">
-            <p className="text-[18px] text-white">{data.title}</p>
+            <p className="text-[18px] text-white leading-[24px]">
+              {data.title}
+            </p>
             <Button variant="icon">
               <Trash2 color="#ccc" />
             </Button>
@@ -63,49 +77,57 @@ function ProductCard({
         <CardContent>
           <div className="grid w-full items-center gap-4 text-[14px]">
             <div>
-              <img src={data.image} alt={data.title} />
+              <img src={data.image} alt={data.title} width="100%" />
             </div>
             <div className="flex font-medium justify-between items-center gap-4 text-white">
               <p>Variants</p>
               <div className="border rounded-full py-[2px] px-4">
-                <p>0</p>
+                <p>
+                  {data.variants && data.variants.length > 0
+                    ? data.variants.length
+                    : 0}
+                </p>
               </div>
             </div>
-            {variants.length < 1 ? (
+            {data.variants === undefined || data.variants === null ? (
               <div className="text-[#ccc] border border-white p-4 mt-1 border-dashed rounded-lg h-20 flex justify-center items-center">
                 <p>No variants yet</p>
               </div>
             ) : (
               <div className="mt-1 flex flex-col gap-2">
-                {variants.map((_, i) => (
-                  <div
-                    key={i}
-                    className="text-white hover:bg-white/30 border border-white p-4 mt-1 rounded-lg h-16 flex justify-between gap-4 items-center"
-                  >
-                    <div className="flex flex-col gap-1">
-                      <div className="flex items-center gap-2">
-                        <p className="font-semibold rounded-full py-[2px] px-2 text-[14px] bg-white/20">
-                          XS
-                        </p>
-                        <p className="h-[20px] w-[20px] bg-blue-600 rounded-full"></p>
+                {data.variants &&
+                  data.variants.length > 0 &&
+                  data.variants.map((e, i) => (
+                    <div
+                      key={i}
+                      className="text-white hover:bg-white/30 border border-white p-4 mt-1 rounded-lg h-16 flex justify-between gap-4 items-center"
+                    >
+                      <div className="flex flex-col gap-1">
+                        <div className="flex items-center gap-2">
+                          <p className="font-semibold rounded-full py-[2px] px-2 text-[14px] bg-white/20">
+                            {e.size}
+                          </p>
+                          <p
+                            className={`h-[20px] w-[20px] bg-${e.color}-600  rounded-full`}
+                          ></p>
+                        </div>
+                        <p>₦{e.price}</p>
                       </div>
-                      <p>₦2.00</p>
+                      <div className="flex items-center gap-4">
+                        <Button
+                          onClick={() => {
+                            setEditVariantCardOpen(true);
+                          }}
+                          variant="icon"
+                        >
+                          <SquarePen />
+                        </Button>
+                        <Button variant="icon">
+                          <Trash2Icon />
+                        </Button>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-4">
-                      <Button
-                        onClick={() => {
-                          setEditVariantCardOpen(true);
-                        }}
-                        variant="icon"
-                      >
-                        <SquarePen />
-                      </Button>
-                      <Button variant="icon">
-                        <Trash2Icon />
-                      </Button>
-                    </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             )}
           </div>
@@ -114,6 +136,7 @@ function ProductCard({
           <Button
             onClick={() => {
               setVariantCardOpen(true);
+              setProductIndex(data.id);
             }}
             className="w-full"
             variant="secondary"

@@ -1,8 +1,22 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
 import { SearchAndFilterBar } from "./SearchAndFilterBar";
 
-function ProductManager() {
+function ProductManager({
+  productCardOpen,
+  editVariantCardOpen,
+  setEditVariantCardOpen,
+  variantCardOpen,
+  setVariantCardOpen,
+}: {
+  productCardOpen: boolean;
+  variantCardOpen: boolean;
+  setVariantCardOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  editVariantCardOpen: boolean;
+  setEditVariantCardOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const [products, setProducts] = useState<
     | {
         category: string;
@@ -12,6 +26,13 @@ function ProductManager() {
         price: number;
         rating: { rate: number; count: number };
         title: string;
+        variants:
+          | {
+              size: string;
+              color: string;
+              price: string;
+            }[]
+          | null;
       }[]
     | null
   >(() =>
@@ -20,14 +41,14 @@ function ProductManager() {
       : null
   );
 
-  // useEffect(() => {
-  //   setProducts(() =>
-  //     localStorage.getItem("products") &&
-  //     localStorage.getItem("products") !== ""
-  //       ? JSON.parse(localStorage.getItem("products")!)
-  //       : null
-  //   );
-  // });
+  useEffect(() => {
+    setProducts(() =>
+      localStorage.getItem("products") &&
+      localStorage.getItem("products") !== ""
+        ? JSON.parse(localStorage.getItem("products")!)
+        : null
+    );
+  }, [productCardOpen, variantCardOpen, editVariantCardOpen]);
 
   return (
     <>
@@ -56,7 +77,14 @@ function ProductManager() {
           />
           <div className="mt-8 flex gap-x-12 gap-y-8 flex-wrap justify-evenly">
             {products.map((e, i) => (
-              <ProductCard key={i} data={e} />
+              <ProductCard
+                key={i}
+                data={e}
+                editVariantCardOpen={editVariantCardOpen}
+                setEditVariantCardOpen={setEditVariantCardOpen}
+                variantCardOpen={variantCardOpen}
+                setVariantCardOpen={setVariantCardOpen}
+              />
             ))}
           </div>
         </div>

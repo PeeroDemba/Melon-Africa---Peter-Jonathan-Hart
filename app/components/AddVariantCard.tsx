@@ -17,12 +17,36 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Button } from "~/components/ui/button";
 import { X } from "lucide-react";
+import { useState } from "react";
 
 function AddVariantCard({
   setVariantCardOpen,
+  data,
+  index,
 }: {
   setVariantCardOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  data: {
+    category: string;
+    description: string;
+    id: number;
+    image: string;
+    price: number;
+    rating: { rate: number; count: number };
+    title: string;
+    variants:
+      | {
+          size: string;
+          color: string;
+          price: string;
+        }[]
+      | null;
+  };
+  index: number;
 }) {
+  const [size, setSize] = useState("");
+  const [color, setColor] = useState("");
+  const [price, setPrice] = useState("");
+
   return (
     <Card className="max-w-[450px] w-full">
       <CardHeader>
@@ -38,7 +62,7 @@ function AddVariantCard({
           </Button>
         </CardTitle>
         <CardDescription className="text-[#ccc]">
-          Add a new variant for -.
+          Add a new variant for {data.title}.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -46,7 +70,11 @@ function AddVariantCard({
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="size">Size</Label>
-              <Select>
+              <Select
+                onValueChange={(v) => {
+                  setSize(v);
+                }}
+              >
                 <SelectTrigger id="size" className="w-full !h-10">
                   <SelectValue placeholder="Select a size" />
                 </SelectTrigger>
@@ -62,7 +90,11 @@ function AddVariantCard({
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="color">Color</Label>
-              <Select>
+              <Select
+                onValueChange={(v) => {
+                  setColor(v);
+                }}
+              >
                 <SelectTrigger id="color" className="w-full !h-10">
                   <SelectValue placeholder="Select a color" />
                 </SelectTrigger>
@@ -117,7 +149,16 @@ function AddVariantCard({
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="price">Price (₦)</Label>
-              <Input id="price" placeholder="0" type="number" min={0} />
+              <Input
+                id="price"
+                placeholder="0"
+                type="number"
+                min={0}
+                onChange={(e) => {
+                  setPrice(e.target.value);
+                }}
+                value={price}
+              />
             </div>
           </div>
         </form>
@@ -125,6 +166,74 @@ function AddVariantCard({
       <CardFooter className="flex justify-end">
         <Button
           onClick={() => {
+            const products:
+              | {
+                  category: string;
+                  description: string;
+                  id: number;
+                  image: string;
+                  price: number;
+                  rating: { rate: number; count: number };
+                  title: string;
+                  variants:
+                    | {
+                        size: string;
+                        color: string;
+                        price: string;
+                      }[]
+                    | null;
+                }[]
+              | string =
+              localStorage.getItem("products") &&
+              localStorage.getItem("products") !== ""
+                ? JSON.parse(localStorage.getItem("products")!)
+                : "";
+            if (products && typeof products !== "string") {
+              const exact = products.some((e) => e.id === index);
+              if (exact) {
+                const filteredProducts = products.map((e) => {
+                  if (e.id === index) {
+                    return {
+                      category: e.category,
+                      description: e.description,
+                      id: e.id,
+                      image: e.image,
+                      price: e.price,
+                      rating: {
+                        rate: e.rating.rate,
+                        count: e.rating.count,
+                      },
+                      title: e.title,
+                      variants:
+                        e.variants && e.variants.length > 0
+                          ? [
+                              ...e.variants,
+                              {
+                                size,
+                                color,
+                                price,
+                              },
+                            ]
+                          : [
+                              {
+                                size,
+                                color,
+                                price,
+                              },
+                            ],
+                    };
+                  } else {
+                    return e;
+                  }
+                });
+
+                localStorage.setItem(
+                  "products",
+                  JSON.stringify([...filteredProducts])
+                );
+              }
+            }
+
             setVariantCardOpen(false);
           }}
         >

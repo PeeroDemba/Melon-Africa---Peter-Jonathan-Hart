@@ -22,7 +22,6 @@ import { useForm } from "react-hook-form";
 function EditVariantCard({
   setEditVariantCardOpen,
   data,
-  variantIndex,
 }: {
   setEditVariantCardOpen: React.Dispatch<React.SetStateAction<boolean>>;
   data: {
@@ -42,14 +41,31 @@ function EditVariantCard({
         }[]
       | null;
   };
-  variantIndex: number;
 }) {
   const { register, watch, setValue } = useForm({
     defaultValues: async () => {
       return {
-        size: data.variants?.[variantIndex - 1].size,
-        color: data.variants?.[variantIndex - 1].color,
-        price: data.variants?.[variantIndex - 1].price,
+        size:
+          data.variants?.[Number(localStorage.getItem("variantIndex"))! - 1] &&
+          data.variants?.[Number(localStorage.getItem("variantIndex"))! - 1]
+            .size
+            ? data.variants?.[Number(localStorage.getItem("variantIndex"))! - 1]
+                .size
+            : "",
+        color:
+          data.variants?.[Number(localStorage.getItem("variantIndex"))! - 1] &&
+          data.variants?.[Number(localStorage.getItem("variantIndex"))! - 1]
+            .color
+            ? data.variants?.[Number(localStorage.getItem("variantIndex"))! - 1]
+                .color
+            : "",
+        price:
+          data.variants?.[Number(localStorage.getItem("variantIndex"))! - 1] &&
+          data.variants?.[Number(localStorage.getItem("variantIndex"))! - 1]
+            .price
+            ? data.variants?.[Number(localStorage.getItem("variantIndex"))! - 1]
+                .price
+            : "",
       };
     },
   });
@@ -234,6 +250,7 @@ function EditVariantCard({
       </CardContent>
       <CardFooter className="flex justify-end">
         <Button
+          type="button"
           onClick={() => {
             const products:
               | {

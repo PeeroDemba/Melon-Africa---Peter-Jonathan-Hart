@@ -10,10 +10,16 @@ function ProductManager({
   setEditVariantCardOpen,
   variantCardOpen,
   setVariantCardOpen,
+  isFilterOpen,
+  setIsFilterOpen,
   deleteProduct,
   setDeleteProduct,
   search,
   setSearch,
+  filterCount,
+  setFilterCount,
+  isCleared,
+  setIsCleared,
 }: {
   productCardOpen: boolean;
   variantCardOpen: boolean;
@@ -22,8 +28,14 @@ function ProductManager({
   setDeleteProduct: React.Dispatch<React.SetStateAction<boolean>>;
   editVariantCardOpen: boolean;
   setEditVariantCardOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isFilterOpen: boolean;
+  setIsFilterOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isCleared: boolean;
+  setIsCleared: React.Dispatch<React.SetStateAction<boolean>>;
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
+  filterCount: number;
+  setFilterCount: React.Dispatch<React.SetStateAction<number>>;
 }) {
   const [products, setProducts] = useState<
     | {
@@ -63,6 +75,9 @@ function ProductManager({
     editVariantCardOpen,
     deleteProduct,
     search,
+    isFilterOpen,
+    isCleared,
+    filterCount,
   ]);
 
   return (
@@ -84,6 +99,10 @@ function ProductManager({
         onFilterChange={() => {}}
         minMaxPrice={[0, 9999999]}
         setSearch={setSearch}
+        setIsFilterOpen={setIsFilterOpen}
+        isFilterOpen={isFilterOpen}
+        setIsCleared={setIsCleared}
+        setFilterCount={setFilterCount}
       />
       {products === null ? (
         <div className="text-white border border-white mt-8 border-dashed rounded-lg h-40 flex justify-center items-center">

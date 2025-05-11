@@ -38,6 +38,10 @@ interface SearchAndFilterBarProps {
   availableSizes: string[];
   minMaxPrice: [number, number];
   setSearch: React.Dispatch<React.SetStateAction<string>>;
+  setIsFilterOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isFilterOpen: boolean;
+  setIsCleared: React.Dispatch<React.SetStateAction<boolean>>;
+  setFilterCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export function SearchAndFilterBar({
@@ -47,8 +51,11 @@ export function SearchAndFilterBar({
   availableSizes,
   minMaxPrice,
   setSearch,
+  setIsFilterOpen,
+  isFilterOpen,
+  setIsCleared,
+  setFilterCount,
 }: SearchAndFilterBarProps) {
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState<FilterOptions>({
     colors: [],
     sizes: [],
@@ -80,13 +87,11 @@ export function SearchAndFilterBar({
     }
   }, [isFilterOpen, activeFilters.priceRange, minMaxPrice]);
 
-  const { register, setValue, watch } = useForm({
+  const { register, setValue } = useForm({
     defaultValues: {
       search: "",
     },
   });
-
-  const search = watch("search");
 
   const handleSearchChange = (value: string) => {
     setSearch(value);
@@ -132,6 +137,11 @@ export function SearchAndFilterBar({
   const handleFilterApply = () => {
     const newFilters = { ...tempFilters };
 
+    localStorage.setItem(
+      "products",
+      JSON.stringify([...JSON.parse(localStorage.getItem("tempProducts")!)])
+    );
+
     // Only set price range if the filter is active
     if (isPriceFilterActive) {
       newFilters.priceRange = priceValues;
@@ -143,7 +153,69 @@ export function SearchAndFilterBar({
     onFilterChange(newFilters);
     setIsFilterOpen(false);
 
-    console.log(newFilters);
+    const products:
+      | {
+          category: string;
+          description: string;
+          id: number;
+          image: string;
+          price: number;
+          rating: { rate: number; count: number };
+          title: string;
+          variants:
+            | {
+                index: number;
+                size: string;
+                color: string;
+                price: string;
+              }[]
+            | null;
+        }[]
+      | string =
+      localStorage.getItem("products") &&
+      localStorage.getItem("products") !== ""
+        ? JSON.parse(localStorage.getItem("products")!)
+        : "";
+
+    if (products && typeof products !== "string") {
+      const filteredProducts = products.filter((e) => {
+        if (
+          e.variants?.some((el) => {
+            if (newFilters && newFilters.colors.length > 0) {
+              return newFilters.colors.some(
+                (e) => e.toLowerCase() === el.color
+              );
+            }
+          }) ||
+          e.variants?.some((el) => {
+            if (newFilters && newFilters.sizes.length > 0) {
+              return newFilters.sizes.some((e) => e === el.size);
+            }
+          }) ||
+          e.variants?.some((el) => {
+            if (newFilters && newFilters.priceRange) {
+              return (
+                newFilters.priceRange[0] <= Number(el.price) &&
+                newFilters.priceRange[1] >= Number(el.price)
+              );
+            }
+          }) ||
+          (newFilters.hasVariants === true &&
+            e.variants &&
+            e.variants.length > 0) ||
+          (newFilters.hasVariants === false &&
+            (!e.variants || e.variants === null))
+        ) {
+          return e;
+        }
+      });
+
+      if (filteredProducts && filteredProducts.length > 0) {
+        localStorage.setItem("products", JSON.stringify([...filteredProducts]));
+      } else {
+        localStorage.setItem("products", "");
+      }
+    }
   };
 
   const handleFilterReset = () => {
@@ -153,12 +225,19 @@ export function SearchAndFilterBar({
       priceRange: null,
       hasVariants: null,
     };
+
     setTempFilters(resetFilters);
     setActiveFilters(resetFilters);
     setPriceValues(minMaxPrice);
     setIsPriceFilterActive(false);
     onFilterChange(resetFilters);
     setIsFilterOpen(false);
+    setIsCleared(false);
+
+    localStorage.setItem(
+      "products",
+      JSON.stringify([...JSON.parse(localStorage.getItem("tempProducts")!)])
+    );
   };
 
   const toggleColorFilter = (color: string) => {
@@ -175,6 +254,7 @@ export function SearchAndFilterBar({
         };
       }
     });
+    setIsCleared(color !== "" ? true : false);
   };
 
   const toggleSizeFilter = (size: string) => {
@@ -191,6 +271,7 @@ export function SearchAndFilterBar({
         };
       }
     });
+    setIsCleared(size !== "" ? true : false);
   };
 
   const setHasVariantsFilter = (value: string) => {
@@ -198,6 +279,7 @@ export function SearchAndFilterBar({
       ...prev,
       hasVariants: value === "with" ? true : value === "without" ? false : null,
     }));
+    setIsCleared(value !== null ? true : false);
   };
 
   const handlePriceChange = (values: number[]) => {
@@ -206,36 +288,10 @@ export function SearchAndFilterBar({
 
   const togglePriceFilter = () => {
     setIsPriceFilterActive(!isPriceFilterActive);
+    setIsCleared(!isPriceFilterActive);
     if (!isPriceFilterActive) {
       setPriceValues(minMaxPrice);
     }
-  };
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("en-NG", {
-      style: "currency",
-      currency: "NGN",
-      maximumFractionDigits: 0,
-    }).format(price);
-  };
-
-  const removeFilter = (type: keyof FilterOptions, value?: string) => {
-    setActiveFilters((prev) => {
-      const newFilters = { ...prev };
-
-      if (type === "colors" && value) {
-        newFilters.colors = prev.colors.filter((c) => c !== value);
-      } else if (type === "sizes" && value) {
-        newFilters.sizes = prev.sizes.filter((s) => s !== value);
-      } else if (type === "priceRange") {
-        newFilters.priceRange = null;
-      } else if (type === "hasVariants") {
-        newFilters.hasVariants = null;
-      }
-
-      onFilterChange(newFilters);
-      return newFilters;
-    });
   };
 
   const hasActiveFilters =
@@ -250,6 +306,112 @@ export function SearchAndFilterBar({
     (activeFilters.priceRange ? 1 : 0) +
     (activeFilters.hasVariants !== null ? 1 : 0);
 
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat("en-NG", {
+      style: "currency",
+      currency: "NGN",
+      maximumFractionDigits: 0,
+    }).format(price);
+  };
+
+  const removeFilter = (type: keyof FilterOptions, value?: string) => {
+    localStorage.setItem(
+      "products",
+      JSON.stringify([...JSON.parse(localStorage.getItem("tempProducts")!)])
+    );
+
+    setActiveFilters((prev) => {
+      const newFilters = { ...prev };
+
+      if (type === "colors" && value) {
+        newFilters.colors = prev.colors.filter((c) => c !== value);
+      } else if (type === "sizes" && value) {
+        newFilters.sizes = prev.sizes.filter((s) => s !== value);
+      } else if (type === "priceRange") {
+        newFilters.priceRange = null;
+      } else if (type === "hasVariants") {
+        newFilters.hasVariants = null;
+      }
+
+      const products:
+        | {
+            category: string;
+            description: string;
+            id: number;
+            image: string;
+            price: number;
+            rating: { rate: number; count: number };
+            title: string;
+            variants:
+              | {
+                  index: number;
+                  size: string;
+                  color: string;
+                  price: string;
+                }[]
+              | null;
+          }[]
+        | string =
+        localStorage.getItem("products") &&
+        localStorage.getItem("products") !== ""
+          ? JSON.parse(localStorage.getItem("products")!)
+          : "";
+
+      if (products && typeof products !== "string") {
+        const filteredProducts = products.filter((e) => {
+          if (
+            e.variants?.some((el) => {
+              if (newFilters && newFilters.colors.length > 0) {
+                return newFilters.colors.some(
+                  (e) => e.toLowerCase() === el.color
+                );
+              }
+            }) ||
+            e.variants?.some((el) => {
+              if (newFilters && newFilters.sizes.length > 0) {
+                return newFilters.sizes.some((e) => e === el.size);
+              }
+            }) ||
+            e.variants?.some((el) => {
+              if (newFilters && newFilters.priceRange) {
+                return (
+                  newFilters.priceRange[0] <= Number(el.price) &&
+                  newFilters.priceRange[1] >= Number(el.price)
+                );
+              }
+            }) ||
+            (newFilters.hasVariants === true &&
+              e.variants &&
+              e.variants.length > 0) ||
+            (newFilters.hasVariants === false &&
+              (!e.variants || e.variants === null))
+          ) {
+            return e;
+          }
+        });
+
+        if (filteredProducts && filteredProducts.length > 0) {
+          localStorage.setItem(
+            "products",
+            JSON.stringify([...filteredProducts])
+          );
+        } else {
+          localStorage.setItem(
+            "products",
+            JSON.stringify([
+              ...JSON.parse(localStorage.getItem("tempProducts")!),
+            ])
+          );
+        }
+      }
+
+      setFilterCount(activeFilterCount);
+
+      onFilterChange(newFilters);
+      return newFilters;
+    });
+  };
+
   return (
     <div className="mb-6 space-y-4 mt-8">
       <div className="flex flex-col sm:flex-row gap-2">
@@ -257,7 +419,7 @@ export function SearchAndFilterBar({
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500 dark:text-gray-400" />
           <Input
             {...register("search")}
-            placeholder="Search products..."
+            placeholder="Search for products by title..."
             onChange={(e) => {
               localStorage.setItem(
                 "products",
@@ -268,12 +430,6 @@ export function SearchAndFilterBar({
               handleSearchChange(e.currentTarget.value);
               setValue("search", e.currentTarget.value);
             }}
-            // onKeyDown={(e) => {
-            //   if (e.key === "Enter") {
-            //     handleSearchChange(e.currentTarget.value);
-            //     setValue("search", e.currentTarget.value);
-            //   }
-            // }}
             className="pl-9"
           />
         </div>

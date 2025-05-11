@@ -214,6 +214,7 @@ function AddVariantCard({
       </CardContent>
       <CardFooter className="flex justify-end">
         <Button
+          type="button"
           onClick={() => {
             const products:
               | {

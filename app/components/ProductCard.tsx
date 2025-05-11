@@ -52,14 +52,7 @@ function ProductCard({
           <AddVariantCard data={data} setVariantCardOpen={setVariantCardOpen} />
         </div>
       )}
-      {editVariantCardOpen && (
-        <div className="fixed top-0 px-4 left-0 w-full h-full backdrop-blur-[4px] bg-black/50 flex justify-center items-center">
-          <EditVariantCard
-            data={data}
-            setEditVariantCardOpen={setEditVariantCardOpen}
-          />
-        </div>
-      )}
+
       <Card className="max-w-[450px] w-full">
         <CardHeader>
           <CardTitle className="flex justify-between items-center gap-4">
@@ -111,8 +104,13 @@ function ProductCard({
                         "products",
                         JSON.stringify([...filteredProducts])
                       );
+                      localStorage.setItem(
+                        "tempProducts",
+                        JSON.stringify([...filteredProducts])
+                      );
                     } else {
                       localStorage.setItem("products", "");
+                      localStorage.setItem("tempProducts", "");
                     }
                   }
                 }
@@ -167,6 +165,15 @@ function ProductCard({
                         </div>
                         <p>₦{e.price}</p>
                       </div>
+                      {editVariantCardOpen && (
+                        <div className="fixed top-0 px-4 left-0 w-full h-full backdrop-blur-[4px] bg-black/50 flex justify-center items-center">
+                          <EditVariantCard
+                            data={data}
+                            variantIndex={e.index}
+                            setEditVariantCardOpen={setEditVariantCardOpen}
+                          />
+                        </div>
+                      )}
                       <div className="flex items-center gap-4">
                         <Button
                           onClick={() => {
@@ -272,6 +279,10 @@ function ProductCard({
 
                                 localStorage.setItem(
                                   "products",
+                                  JSON.stringify([...filteredProducts])
+                                );
+                                localStorage.setItem(
+                                  "tempProducts",
                                   JSON.stringify([...filteredProducts])
                                 );
                               }

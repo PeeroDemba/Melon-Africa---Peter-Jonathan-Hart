@@ -164,8 +164,13 @@ function AddProductCard({
                   "products",
                   JSON.stringify([...products, product])
                 );
+              localStorage.setItem(
+                "tempProducts",
+                JSON.stringify([...products, product])
+              );
             } else {
               localStorage.setItem("products", JSON.stringify([product]));
+              localStorage.setItem("tempProducts", JSON.stringify([product]));
             }
             setProductCardOpen(false);
           }}

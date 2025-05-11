@@ -22,6 +22,7 @@ import {
 } from "~/components/ui/card";
 import { Slider } from "~/components/ui/slider";
 import { Label } from "./ui/label";
+import { useForm } from "react-hook-form";
 
 export interface FilterOptions {
   colors: string[];
@@ -36,6 +37,7 @@ interface SearchAndFilterBarProps {
   availableColors: string[];
   availableSizes: string[];
   minMaxPrice: [number, number];
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export function SearchAndFilterBar({
@@ -44,8 +46,8 @@ export function SearchAndFilterBar({
   availableColors,
   availableSizes,
   minMaxPrice,
+  setSearch,
 }: SearchAndFilterBarProps) {
-  const [search, setSearch] = useState("");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState<FilterOptions>({
     colors: [],
@@ -78,10 +80,53 @@ export function SearchAndFilterBar({
     }
   }, [isFilterOpen, activeFilters.priceRange, minMaxPrice]);
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+  const { register, setValue, watch } = useForm({
+    defaultValues: {
+      search: "",
+    },
+  });
+
+  const search = watch("search");
+
+  const handleSearchChange = (value: string) => {
     setSearch(value);
     onSearchChange(value);
+
+    const products:
+      | {
+          category: string;
+          description: string;
+          id: number;
+          image: string;
+          price: number;
+          rating: { rate: number; count: number };
+          title: string;
+          variants:
+            | {
+                index: number;
+                size: string;
+                color: string;
+                price: string;
+              }[]
+            | null;
+        }[]
+      | string =
+      localStorage.getItem("products") &&
+      localStorage.getItem("products") !== ""
+        ? JSON.parse(localStorage.getItem("products")!)
+        : "";
+
+    if (products && typeof products !== "string") {
+      const filteredProducts = products.filter((e) =>
+        e.title.toLowerCase().includes(value)
+      );
+
+      if (filteredProducts && filteredProducts.length > 0) {
+        localStorage.setItem("products", JSON.stringify([...filteredProducts]));
+      } else {
+        localStorage.setItem("products", "");
+      }
+    }
   };
 
   const handleFilterApply = () => {
@@ -97,6 +142,8 @@ export function SearchAndFilterBar({
     setActiveFilters(newFilters);
     onFilterChange(newFilters);
     setIsFilterOpen(false);
+
+    console.log(newFilters);
   };
 
   const handleFilterReset = () => {
@@ -204,14 +251,29 @@ export function SearchAndFilterBar({
     (activeFilters.hasVariants !== null ? 1 : 0);
 
   return (
-    <div className="mb-6 space-y-4">
+    <div className="mb-6 space-y-4 mt-8">
       <div className="flex flex-col sm:flex-row gap-2">
         <div className="relative flex-grow">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500 dark:text-gray-400" />
           <Input
+            {...register("search")}
             placeholder="Search products..."
-            value={search}
-            onChange={handleSearchChange}
+            onChange={(e) => {
+              localStorage.setItem(
+                "products",
+                JSON.stringify([
+                  ...JSON.parse(localStorage.getItem("tempProducts")!),
+                ])
+              );
+              handleSearchChange(e.currentTarget.value);
+              setValue("search", e.currentTarget.value);
+            }}
+            // onKeyDown={(e) => {
+            //   if (e.key === "Enter") {
+            //     handleSearchChange(e.currentTarget.value);
+            //     setValue("search", e.currentTarget.value);
+            //   }
+            // }}
             className="pl-9"
           />
         </div>

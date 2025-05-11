@@ -22,6 +22,7 @@ import { useForm } from "react-hook-form";
 function EditVariantCard({
   setEditVariantCardOpen,
   data,
+  variantIndex,
 }: {
   setEditVariantCardOpen: React.Dispatch<React.SetStateAction<boolean>>;
   data: {
@@ -41,18 +42,14 @@ function EditVariantCard({
         }[]
       | null;
   };
+  variantIndex: number;
 }) {
   const { register, watch, setValue } = useForm({
     defaultValues: async () => {
       return {
-        size: data.variants?.[Number(localStorage.getItem("variantIndex")) - 1]
-          .size,
-        color:
-          data.variants?.[Number(localStorage.getItem("variantIndex")) - 1]
-            .color,
-        price:
-          data.variants?.[Number(localStorage.getItem("variantIndex")) - 1]
-            .price,
+        size: data.variants?.[variantIndex - 1].size,
+        color: data.variants?.[variantIndex - 1].color,
+        price: data.variants?.[variantIndex - 1].price,
       };
     },
   });
@@ -305,6 +302,10 @@ function EditVariantCard({
 
                 localStorage.setItem(
                   "products",
+                  JSON.stringify([...filteredProducts])
+                );
+                localStorage.setItem(
+                  "tempProducts",
                   JSON.stringify([...filteredProducts])
                 );
               }

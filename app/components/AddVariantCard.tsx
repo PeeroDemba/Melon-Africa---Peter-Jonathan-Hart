@@ -281,6 +281,10 @@ function AddVariantCard({
                 "products",
                 JSON.stringify([...filteredProducts])
               );
+              localStorage.setItem(
+                "tempProducts",
+                JSON.stringify([...filteredProducts])
+              );
             }
 
             setVariantCardOpen(false);

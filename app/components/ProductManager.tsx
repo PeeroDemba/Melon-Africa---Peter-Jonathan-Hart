@@ -12,6 +12,8 @@ function ProductManager({
   setVariantCardOpen,
   deleteProduct,
   setDeleteProduct,
+  search,
+  setSearch,
 }: {
   productCardOpen: boolean;
   variantCardOpen: boolean;
@@ -20,6 +22,8 @@ function ProductManager({
   setDeleteProduct: React.Dispatch<React.SetStateAction<boolean>>;
   editVariantCardOpen: boolean;
   setEditVariantCardOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  search: string;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const [products, setProducts] = useState<
     | {
@@ -53,33 +57,40 @@ function ProductManager({
         ? JSON.parse(localStorage.getItem("products")!)
         : null
     );
-  }, [productCardOpen, variantCardOpen, editVariantCardOpen, deleteProduct]);
+  }, [
+    productCardOpen,
+    variantCardOpen,
+    editVariantCardOpen,
+    deleteProduct,
+    search,
+  ]);
 
   return (
     <>
+      <SearchAndFilterBar
+        onSearchChange={() => {}}
+        availableSizes={["XS", "S", "M", "L", "XL", "XXL"]}
+        availableColors={[
+          "Red",
+          "Blue",
+          "Green",
+          "Black",
+          "White",
+          "Yellow",
+          "Purple",
+          "Orange",
+          "Pink",
+        ]}
+        onFilterChange={() => {}}
+        minMaxPrice={[0, 9999999]}
+        setSearch={setSearch}
+      />
       {products === null ? (
         <div className="text-white border border-white mt-8 border-dashed rounded-lg h-40 flex justify-center items-center">
           <p>No products yet. Add your first product to get started.</p>
         </div>
       ) : (
         <div className="mt-8">
-          <SearchAndFilterBar
-            onSearchChange={() => {}}
-            availableSizes={["XS", "S", "M", "L", "XL", "XXL"]}
-            availableColors={[
-              "Red",
-              "Blue",
-              "Green",
-              "Black",
-              "White",
-              "Yellow",
-              "Purple",
-              "Orange",
-              "Pink",
-            ]}
-            onFilterChange={() => {}}
-            minMaxPrice={[0, 9999999]}
-          />
           <div className="mt-8 flex gap-x-12 gap-y-8 flex-wrap justify-evenly">
             {products.map((e, i) => (
               <ProductCard

@@ -10,7 +10,6 @@ import {
 } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
 import { Plus, SquarePen, Trash2, Trash2Icon } from "lucide-react";
-import { useRef, useState } from "react";
 import AddVariantCard from "./AddVariantCard";
 import EditVariantCard from "./EditVariantCard";
 
@@ -20,6 +19,8 @@ function ProductCard({
   setEditVariantCardOpen,
   variantCardOpen,
   setVariantCardOpen,
+
+  setDeleteProduct,
 }: {
   data: {
     category: string;
@@ -42,9 +43,8 @@ function ProductCard({
   setVariantCardOpen: React.Dispatch<React.SetStateAction<boolean>>;
   editVariantCardOpen: boolean;
   setEditVariantCardOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setDeleteProduct: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const [variantIndex, setVariantIndex] = useState(0);
-
   return (
     <>
       {variantCardOpen && (
@@ -62,11 +62,62 @@ function ProductCard({
       )}
       <Card className="max-w-[450px] w-full">
         <CardHeader>
-          <CardTitle className="flex justify-between items-center">
+          <CardTitle className="flex justify-between items-center gap-4">
             <p className="text-[18px] text-white leading-[24px]">
               {data.title}
             </p>
-            <Button variant="icon">
+            <Button
+              variant="icon"
+              onClick={() => {
+                localStorage.setItem("productIndex", String(data.id));
+                setDeleteProduct((v) => !v);
+
+                const products:
+                  | {
+                      category: string;
+                      description: string;
+                      id: number;
+                      image: string;
+                      price: number;
+                      rating: { rate: number; count: number };
+                      title: string;
+                      variants:
+                        | {
+                            index: number;
+                            size: string;
+                            color: string;
+                            price: string;
+                          }[]
+                        | null;
+                    }[]
+                  | string =
+                  localStorage.getItem("products") &&
+                  localStorage.getItem("products") !== ""
+                    ? JSON.parse(localStorage.getItem("products")!)
+                    : "";
+                if (products && typeof products !== "string") {
+                  const exact = products.some(
+                    (e) => e.id === Number(localStorage.getItem("productIndex"))
+                  );
+
+                  if (exact) {
+                    const filteredProducts = products.filter(
+                      (e) =>
+                        e.id !== Number(localStorage.getItem("productIndex"))
+                    );
+
+                    if (filteredProducts && filteredProducts.length > 0) {
+                      localStorage.setItem(
+                        "products",
+                        JSON.stringify([...filteredProducts])
+                      );
+                    } else {
+                      localStorage.setItem("products", "");
+                    }
+                  }
+                }
+              }}
+            >
               <Trash2 color="#ccc" />
             </Button>
           </CardTitle>
@@ -120,7 +171,6 @@ function ProductCard({
                         <Button
                           onClick={() => {
                             setEditVariantCardOpen(() => true);
-                            setVariantIndex(() => e.index);
                             localStorage.setItem(
                               "variantIndex",
                               String(e.index)
@@ -134,7 +184,100 @@ function ProductCard({
                         >
                           <SquarePen />
                         </Button>
-                        <Button variant="icon">
+                        <Button
+                          variant="icon"
+                          onClick={() => {
+                            localStorage.setItem(
+                              "variantIndex",
+                              String(e.index)
+                            );
+                            localStorage.setItem(
+                              "productIndex",
+                              String(data.id)
+                            );
+                            setDeleteProduct((v) => !v);
+
+                            const products:
+                              | {
+                                  category: string;
+                                  description: string;
+                                  id: number;
+                                  image: string;
+                                  price: number;
+                                  rating: { rate: number; count: number };
+                                  title: string;
+                                  variants:
+                                    | {
+                                        index: number;
+                                        size: string;
+                                        color: string;
+                                        price: string;
+                                      }[]
+                                    | null;
+                                }[]
+                              | string =
+                              localStorage.getItem("products") &&
+                              localStorage.getItem("products") !== ""
+                                ? JSON.parse(localStorage.getItem("products")!)
+                                : "";
+                            if (products && typeof products !== "string") {
+                              const exact = products.some(
+                                (e) =>
+                                  e.id ===
+                                  Number(localStorage.getItem("productIndex"))
+                              );
+
+                              if (exact) {
+                                const filteredProducts = products.map((e) => {
+                                  if (
+                                    e.id ===
+                                    Number(localStorage.getItem("productIndex"))
+                                  ) {
+                                    return {
+                                      category: e.category,
+                                      description: e.description,
+                                      id: e.id,
+                                      image: e.image,
+                                      price: e.price,
+                                      rating: {
+                                        rate: e.rating.rate,
+                                        count: e.rating.count,
+                                      },
+                                      title: e.title,
+                                      variants:
+                                        e.variants!.filter(
+                                          (e) =>
+                                            e.index !==
+                                            Number(
+                                              localStorage.getItem(
+                                                "variantIndex"
+                                              )
+                                            )
+                                        ).length > 0
+                                          ? e.variants!.filter(
+                                              (e) =>
+                                                e.index !==
+                                                Number(
+                                                  localStorage.getItem(
+                                                    "variantIndex"
+                                                  )
+                                                )
+                                            )
+                                          : null,
+                                    };
+                                  } else {
+                                    return e;
+                                  }
+                                });
+
+                                localStorage.setItem(
+                                  "products",
+                                  JSON.stringify([...filteredProducts])
+                                );
+                              }
+                            }
+                          }}
+                        >
                           <Trash2Icon />
                         </Button>
                       </div>

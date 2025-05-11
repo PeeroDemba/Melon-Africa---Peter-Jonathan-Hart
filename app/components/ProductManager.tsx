@@ -10,10 +10,14 @@ function ProductManager({
   setEditVariantCardOpen,
   variantCardOpen,
   setVariantCardOpen,
+  deleteProduct,
+  setDeleteProduct,
 }: {
   productCardOpen: boolean;
   variantCardOpen: boolean;
   setVariantCardOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  deleteProduct: boolean;
+  setDeleteProduct: React.Dispatch<React.SetStateAction<boolean>>;
   editVariantCardOpen: boolean;
   setEditVariantCardOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
@@ -49,7 +53,7 @@ function ProductManager({
         ? JSON.parse(localStorage.getItem("products")!)
         : null
     );
-  }, [productCardOpen, variantCardOpen, editVariantCardOpen]);
+  }, [productCardOpen, variantCardOpen, editVariantCardOpen, deleteProduct]);
 
   return (
     <>
@@ -85,6 +89,7 @@ function ProductManager({
                 setEditVariantCardOpen={setEditVariantCardOpen}
                 variantCardOpen={variantCardOpen}
                 setVariantCardOpen={setVariantCardOpen}
+                setDeleteProduct={setDeleteProduct}
               />
             ))}
           </div>

@@ -19,6 +19,7 @@ export default function Home() {
   const [productCardOpen, setProductCardOpen] = useState(false);
   const [variantCardOpen, setVariantCardOpen] = useState(false);
   const [editVariantCardOpen, setEditVariantCardOpen] = useState(false);
+  const [deleteProduct, setDeleteProduct] = useState(false);
 
   return (
     <main className="container mx-auto py-8 px-4 ">
@@ -43,6 +44,8 @@ export default function Home() {
         setEditVariantCardOpen={setEditVariantCardOpen}
         variantCardOpen={variantCardOpen}
         setVariantCardOpen={setVariantCardOpen}
+        deleteProduct={deleteProduct}
+        setDeleteProduct={setDeleteProduct}
       />
       {productCardOpen && (
         <div className="fixed top-0 px-4 left-0 w-full h-full backdrop-blur-[4px] bg-black/50 flex justify-center items-center">

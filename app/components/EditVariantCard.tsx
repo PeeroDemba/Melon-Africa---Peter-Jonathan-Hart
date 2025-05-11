@@ -22,8 +22,6 @@ import { useForm } from "react-hook-form";
 function EditVariantCard({
   setEditVariantCardOpen,
   data,
-  variantIndex,
-  productIndex,
 }: {
   setEditVariantCardOpen: React.Dispatch<React.SetStateAction<boolean>>;
   data: {
@@ -43,15 +41,18 @@ function EditVariantCard({
         }[]
       | null;
   };
-  variantIndex: number;
-  productIndex: number;
 }) {
   const { register, watch, setValue } = useForm({
     defaultValues: async () => {
       return {
-        size: data.variants?.[variantIndex - 1].size,
-        color: data.variants?.[variantIndex - 1].color,
-        price: data.variants?.[variantIndex - 1].price,
+        size: data.variants?.[Number(localStorage.getItem("variantIndex")) - 1]
+          .size,
+        color:
+          data.variants?.[Number(localStorage.getItem("variantIndex")) - 1]
+            .color,
+        price:
+          data.variants?.[Number(localStorage.getItem("variantIndex")) - 1]
+            .price,
       };
     },
   });
@@ -261,11 +262,13 @@ function EditVariantCard({
                 ? JSON.parse(localStorage.getItem("products")!)
                 : "";
             if (products && typeof products !== "string") {
-              const exact = products.some((e) => e.id === productIndex);
+              const exact = products.some(
+                (e) => e.id === Number(localStorage.getItem("productIndex"))
+              );
 
               if (exact) {
                 const filteredProducts = products.map((e) => {
-                  if (e.id === productIndex) {
+                  if (e.id === Number(localStorage.getItem("productIndex"))) {
                     return {
                       category: e.category,
                       description: e.description,
@@ -279,9 +282,12 @@ function EditVariantCard({
                       title: e.title,
                       variants: e.variants
                         ? e.variants.map((e) => {
-                            if (e.index === variantIndex) {
+                            if (
+                              e.index ===
+                              Number(localStorage.getItem("variantIndex"))
+                            ) {
                               return {
-                                index: variantIndex,
+                                index: e.index,
                                 size: size,
                                 color: color,
                                 price: price,

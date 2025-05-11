@@ -17,13 +17,11 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Button } from "~/components/ui/button";
 import { X } from "lucide-react";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 function AddVariantCard({
   setVariantCardOpen,
   data,
-  productIndex,
 }: {
   setVariantCardOpen: React.Dispatch<React.SetStateAction<boolean>>;
   data: {
@@ -43,7 +41,6 @@ function AddVariantCard({
         }[]
       | null;
   };
-  productIndex: number;
 }) {
   const { register, watch, setValue } = useForm({
     defaultValues: {
@@ -56,8 +53,6 @@ function AddVariantCard({
   const size = watch("size");
   const color = watch("color");
   const price = watch("price");
-
-  console.log(productIndex);
 
   return (
     <Card className="max-w-[450px] w-full">
@@ -244,51 +239,48 @@ function AddVariantCard({
                 ? JSON.parse(localStorage.getItem("products")!)
                 : "";
             if (products && typeof products !== "string") {
-              const exact = products.some((e) => e.id === productIndex);
-              if (exact) {
-                const filteredProducts = products.map((e) => {
-                  if (e.id === productIndex) {
-                    return {
-                      category: e.category,
-                      description: e.description,
-                      id: e.id,
-                      image: e.image,
-                      price: e.price,
-                      rating: {
-                        rate: e.rating.rate,
-                        count: e.rating.count,
-                      },
-                      title: e.title,
-                      variants:
-                        e.variants && e.variants.length > 0
-                          ? [
-                              ...e.variants,
-                              {
-                                index: e.variants.length + 1,
-                                size,
-                                color,
-                                price,
-                              },
-                            ]
-                          : [
-                              {
-                                index: 1,
-                                size,
-                                color,
-                                price,
-                              },
-                            ],
-                    };
-                  } else {
-                    return e;
-                  }
-                });
+              const filteredProducts = products.map((e) => {
+                if (e.id === Number(localStorage.getItem("productIndex"))) {
+                  return {
+                    category: e.category,
+                    description: e.description,
+                    id: e.id,
+                    image: e.image,
+                    price: e.price,
+                    rating: {
+                      rate: e.rating.rate,
+                      count: e.rating.count,
+                    },
+                    title: e.title,
+                    variants:
+                      e.variants && e.variants.length > 0
+                        ? [
+                            ...e.variants,
+                            {
+                              index: e.variants.length + 1,
+                              size,
+                              color,
+                              price,
+                            },
+                          ]
+                        : [
+                            {
+                              index: 1,
+                              size,
+                              color,
+                              price,
+                            },
+                          ],
+                  };
+                } else {
+                  return e;
+                }
+              });
 
-                localStorage.setItem(
-                  "products",
-                  JSON.stringify([...filteredProducts])
-                );
-              }
+              localStorage.setItem(
+                "products",
+                JSON.stringify([...filteredProducts])
+              );
             }
 
             setVariantCardOpen(false);

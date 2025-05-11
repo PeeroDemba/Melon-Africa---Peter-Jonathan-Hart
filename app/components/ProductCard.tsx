@@ -10,7 +10,7 @@ import {
 } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
 import { Plus, SquarePen, Trash2, Trash2Icon } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import AddVariantCard from "./AddVariantCard";
 import EditVariantCard from "./EditVariantCard";
 
@@ -43,26 +43,19 @@ function ProductCard({
   editVariantCardOpen: boolean;
   setEditVariantCardOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const [productIndex, setProductIndex] = useState(0);
   const [variantIndex, setVariantIndex] = useState(0);
 
   return (
     <>
       {variantCardOpen && (
         <div className="fixed top-0 px-4 left-0 w-full h-full backdrop-blur-[4px] bg-black/50 flex justify-center items-center">
-          <AddVariantCard
-            data={data}
-            productIndex={productIndex}
-            setVariantCardOpen={setVariantCardOpen}
-          />
+          <AddVariantCard data={data} setVariantCardOpen={setVariantCardOpen} />
         </div>
       )}
       {editVariantCardOpen && (
         <div className="fixed top-0 px-4 left-0 w-full h-full backdrop-blur-[4px] bg-black/50 flex justify-center items-center">
           <EditVariantCard
             data={data}
-            variantIndex={variantIndex}
-            productIndex={productIndex}
             setEditVariantCardOpen={setEditVariantCardOpen}
           />
         </div>
@@ -126,9 +119,16 @@ function ProductCard({
                       <div className="flex items-center gap-4">
                         <Button
                           onClick={() => {
-                            setEditVariantCardOpen(true);
-                            setVariantIndex(e.index);
-                            setProductIndex(data.id);
+                            setEditVariantCardOpen(() => true);
+                            setVariantIndex(() => e.index);
+                            localStorage.setItem(
+                              "variantIndex",
+                              String(e.index)
+                            );
+                            localStorage.setItem(
+                              "productIndex",
+                              String(data.id)
+                            );
                           }}
                           variant="icon"
                         >
@@ -148,7 +148,7 @@ function ProductCard({
           <Button
             onClick={() => {
               setVariantCardOpen(true);
-              setProductIndex(data.id);
+              localStorage.setItem("productIndex", String(data.id));
             }}
             className="w-full"
             variant="secondary"

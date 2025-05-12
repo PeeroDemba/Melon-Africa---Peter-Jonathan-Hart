@@ -65,17 +65,17 @@ Add screenshots of your application here to showcase its features and UI.
 
 _Example:_
 
-![Home Page](https://drive.google.com/file/d/11kGLgxqibwUnlOsKRmupuIft_X3kzMg4/view?usp=drive_link)
+![Home Page](/HomePage.png)
 _Home Page view with search input, filter button and lists of products cards_
 
-![Add Products](https://drive.google.com/file/d/1f8REZWCAyKlNlsGS90t88GDVg04yypVu/view?usp=drive_link)
+![Add Products](/AddProduct.png)
 _Add Products modal_
 
-![Filter Products](https://drive.google.com/file/d/1qLbdznFcXVu5lyDdWC38bFq32rM0neFO/view?usp=drive_link)
+![Filter Products](/FilterProducts.png)
 _Filter Products modal_
 
-![Add Variant](https://drive.google.com/file/d/1tKZkXAd525b0sktdJF5ArLNvzKiTGB2X/view?usp=drive_link)
+![Add Variant](/AddVariant.png)
 _Add Variant modal_
 
-![Edit Variant](https://drive.google.com/file/d/1z365QlzWhDOqCcz4sQw2UtNGQkFNFybw/view?usp=drive_link)
+![Edit Variant](/EditVariant.png)
 _Edit Variant modal_

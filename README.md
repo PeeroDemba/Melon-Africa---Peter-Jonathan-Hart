@@ -65,17 +65,17 @@ Add screenshots of your application here to showcase its features and UI.
 
 _Example:_
 
-![Home Page](/HomePage.png)
+![Home Page](https://collection.cloudinary.com/dqhl9cbt6/e7675c5f5772cbb429ee9236ed7209f2)
 _Home Page view with search input, filter button and lists of products cards_
 
-![Add Products](/AddProduct.png)
+![Add Products](https://collection.cloudinary.com/dqhl9cbt6/e7675c5f5772cbb429ee9236ed7209f2)
 _Add Products modal_
 
-![Filter Products](/FilterProducts.png)
+![Filter Products](https://collection.cloudinary.com/dqhl9cbt6/e7675c5f5772cbb429ee9236ed7209f2)
 _Filter Products modal_
 
-![Add Variant](/AddVariant.png)
+![Add Variant](https://collection.cloudinary.com/dqhl9cbt6/e7675c5f5772cbb429ee9236ed7209f2)
 _Add Variant modal_
 
-![Edit Variant](/EditVariant.png)
+![Edit Variant](https://collection.cloudinary.com/dqhl9cbt6/e7675c5f5772cbb429ee9236ed7209f2)
 _Edit Variant modal_

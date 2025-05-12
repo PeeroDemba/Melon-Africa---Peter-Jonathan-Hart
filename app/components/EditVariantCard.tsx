@@ -22,26 +22,8 @@ import { toast } from "react-toastify";
 
 function EditVariantCard({
   setEditVariantCardOpen,
-  data,
 }: {
   setEditVariantCardOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  data: {
-    category: string;
-    description: string;
-    id: number;
-    image: string;
-    price: number;
-    rating: { rate: number; count: number };
-    title: string;
-    variants:
-      | {
-          index: number;
-          size: string;
-          color: string;
-          price: string;
-        }[]
-      | null;
-  };
 }) {
   const products:
     | {
@@ -103,25 +85,37 @@ function EditVariantCard({
     defaultValues: async () => {
       return {
         size:
-          data.variants?.[Number(localStorage.getItem("variantIndex"))! - 1] &&
-          data.variants?.[Number(localStorage.getItem("variantIndex"))! - 1]
-            .size
-            ? data.variants?.[Number(localStorage.getItem("variantIndex"))! - 1]
-                .size
+          filteredProducts[0].variants?.[
+            Number(localStorage.getItem("variantIndex"))! - 1
+          ] &&
+          filteredProducts[0].variants?.[
+            Number(localStorage.getItem("variantIndex"))! - 1
+          ].size
+            ? filteredProducts[0].variants?.[
+                Number(localStorage.getItem("variantIndex"))! - 1
+              ].size
             : "",
         color:
-          data.variants?.[Number(localStorage.getItem("variantIndex"))! - 1] &&
-          data.variants?.[Number(localStorage.getItem("variantIndex"))! - 1]
-            .color
-            ? data.variants?.[Number(localStorage.getItem("variantIndex"))! - 1]
-                .color
+          filteredProducts[0].variants?.[
+            Number(localStorage.getItem("variantIndex"))! - 1
+          ] &&
+          filteredProducts[0].variants?.[
+            Number(localStorage.getItem("variantIndex"))! - 1
+          ].color
+            ? filteredProducts[0].variants?.[
+                Number(localStorage.getItem("variantIndex"))! - 1
+              ].color
             : "",
         price:
-          data.variants?.[Number(localStorage.getItem("variantIndex"))! - 1] &&
-          data.variants?.[Number(localStorage.getItem("variantIndex"))! - 1]
-            .price
-            ? data.variants?.[Number(localStorage.getItem("variantIndex"))! - 1]
-                .price
+          filteredProducts[0].variants?.[
+            Number(localStorage.getItem("variantIndex"))! - 1
+          ] &&
+          filteredProducts[0].variants?.[
+            Number(localStorage.getItem("variantIndex"))! - 1
+          ].price
+            ? filteredProducts[0].variants?.[
+                Number(localStorage.getItem("variantIndex"))! - 1
+              ].price
             : "",
       };
     },

@@ -66,10 +66,7 @@ function ProductCard({
           }}
           className="fixed top-0 px-4 left-0 w-full h-full backdrop-blur-[4px] bg-black/30 flex justify-center items-center"
         >
-          <EditVariantCard
-            data={data}
-            setEditVariantCardOpen={setEditVariantCardOpen}
-          />
+          <EditVariantCard setEditVariantCardOpen={setEditVariantCardOpen} />
         </div>
       )}
       <Card className="max-w-[450px] w-full">

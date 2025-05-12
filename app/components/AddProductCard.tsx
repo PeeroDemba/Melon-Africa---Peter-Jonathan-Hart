@@ -183,9 +183,7 @@ function AddProductCard({
                     </SelectTrigger>
                     <SelectContent
                       position="popper"
-                      className={`bg-[#030712] ${
-                        !isLoading && "-translate-[25%]"
-                      }`}
+                      className="bg-[#030712] w-min"
                     >
                       {isLoading ? (
                         <SelectItem value="loading" disabled>

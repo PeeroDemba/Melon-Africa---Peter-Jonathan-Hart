@@ -107,7 +107,7 @@ function ProductManager({
       {products === null ? (
         <section
           aria-label="Product Manager"
-          className="text-white border border-white mt-8 border-dashed rounded-lg h-40 flex justify-center items-center"
+          className="text-white border text-center px-4 border-white mt-8 border-dashed rounded-lg h-40 flex justify-center items-center"
         >
           <p>No products yet. Add your first product to get started.</p>
         </section>

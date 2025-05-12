@@ -20,6 +20,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 function AddProductCard({
   setProductCardOpen,
@@ -141,19 +142,25 @@ function AddProductCard({
                 ? JSON.parse(localStorage.getItem("products")!)
                 : "";
             if (products && typeof products !== "string") {
-              if (products.every((e) => product?.title !== e.title))
+              if (products.every((e) => product?.title !== e.title)) {
+                toast.success("New Product Added Successfully");
                 localStorage.setItem(
                   "products",
                   JSON.stringify([...products, product])
                 );
-              localStorage.setItem(
-                "tempProducts",
-                JSON.stringify([...products, product])
-              );
+                localStorage.setItem(
+                  "tempProducts",
+                  JSON.stringify([...products, product])
+                );
+              } else {
+                toast.error("Product already exists");
+              }
             } else {
+              toast.success("New Product Added Successfully");
               localStorage.setItem("products", JSON.stringify([product]));
               localStorage.setItem("tempProducts", JSON.stringify([product]));
             }
+
             setProductCardOpen(false);
           })}
         >

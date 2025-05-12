@@ -12,7 +12,7 @@ import { Button } from "~/components/ui/button";
 import { Plus, SquarePen, Trash2, Trash2Icon } from "lucide-react";
 import AddVariantCard from "./AddVariantCard";
 import EditVariantCard from "./EditVariantCard";
-import { useState } from "react";
+import { toast } from "react-toastify";
 
 function ProductCard({
   data,
@@ -84,6 +84,7 @@ function ProductCard({
               onClick={() => {
                 localStorage.setItem("productIndex", String(data.id));
                 setDeleteProduct((v) => !v);
+                toast.success("Product Deleted Successfully");
 
                 const products:
                   | {
@@ -289,6 +290,10 @@ function ProductCard({
                                     return e;
                                   }
                                 });
+
+                                toast.success(
+                                  "Product Variant Deleted Successfully"
+                                );
 
                                 localStorage.setItem(
                                   "products",

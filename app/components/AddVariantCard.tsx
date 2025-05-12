@@ -18,6 +18,7 @@ import { Label } from "~/components/ui/label";
 import { Button } from "~/components/ui/button";
 import { X } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 function AddVariantCard({
   setVariantCardOpen,
@@ -423,7 +424,7 @@ function AddVariantCard({
                 JSON.stringify([...filteredProducts])
               );
             }
-
+            toast.success("New Variant Added to Product Successfully");
             setVariantCardOpen(false);
           }}
         >

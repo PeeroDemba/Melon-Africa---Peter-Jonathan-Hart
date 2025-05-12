@@ -18,6 +18,7 @@ import { Label } from "~/components/ui/label";
 import { Button } from "~/components/ui/button";
 import { X } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 function EditVariantCard({
   setEditVariantCardOpen,
@@ -392,6 +393,7 @@ function EditVariantCard({
                 );
               }
             }
+            toast.success("Product Variant Edited Successfully");
             setEditVariantCardOpen(false);
           }}
         >

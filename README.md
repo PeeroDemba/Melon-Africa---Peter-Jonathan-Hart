@@ -8,11 +8,12 @@ This project is built with the following technologies:
 
 - React.js
 - Tailwind CSS
-- React Router (for routing)
+- React Router
 - React Query
 - Shadcn UI
 - TypeScript
 - React Hook Form
+- React Toastify
 
 - **Deployment**:
   - Vercel

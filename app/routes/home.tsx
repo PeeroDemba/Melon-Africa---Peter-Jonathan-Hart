@@ -4,6 +4,7 @@ import { Plus } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { useState } from "react";
 import AddProductCard from "~/components/AddProductCard";
+import { ToastContainer, toast } from "react-toastify";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -26,50 +27,54 @@ export default function Home() {
   const [filterCount, setFilterCount] = useState(0);
 
   return (
-    <main className="container mx-auto py-8 px-4 ">
-      <h1 className="text-3xl font-bold mb-8">Product Manager</h1>
-      <div className="flex justify-between gap-4 items-center">
-        <p className="font-semibold">Products</p>
-        <Button
-          onClick={() => {
-            setProductCardOpen(true);
-          }}
-        >
-          <div className="h-[20px] w-[20px] rounded-full border-2 border-black flex justify-center items-center">
-            <Plus size={16} />
-          </div>
-          <span>Add Product</span>
-        </Button>
-      </div>
-
-      <ProductManager
-        productCardOpen={productCardOpen}
-        editVariantCardOpen={editVariantCardOpen}
-        setEditVariantCardOpen={setEditVariantCardOpen}
-        variantCardOpen={variantCardOpen}
-        setVariantCardOpen={setVariantCardOpen}
-        isFilterOpen={isFilterOpen}
-        setIsFilterOpen={setIsFilterOpen}
-        isCleared={isCleared}
-        setIsCleared={setIsCleared}
-        deleteProduct={deleteProduct}
-        setDeleteProduct={setDeleteProduct}
-        search={search}
-        setSearch={setSearch}
-        filterCount={filterCount}
-        setFilterCount={setFilterCount}
-      />
-      {productCardOpen && (
-        <div
-          onClick={(e) => {
-            e.stopPropagation();
-            setProductCardOpen(false);
-          }}
-          className="fixed top-0 px-4 left-0 w-full h-full backdrop-blur-[4px] bg-black/30 flex justify-center items-center"
-        >
-          <AddProductCard setProductCardOpen={setProductCardOpen} />
+    <>
+      {" "}
+      <ToastContainer />
+      <main className="container mx-auto py-8 px-4 ">
+        <h1 className="text-3xl font-bold mb-8">Product Manager</h1>
+        <div className="flex justify-between gap-4 items-center">
+          <p className="font-semibold">Products</p>
+          <Button
+            onClick={() => {
+              setProductCardOpen(true);
+            }}
+          >
+            <div className="h-[20px] w-[20px] rounded-full border-2 border-black flex justify-center items-center">
+              <Plus size={16} />
+            </div>
+            <span>Add Product</span>
+          </Button>
         </div>
-      )}
-    </main>
+
+        <ProductManager
+          productCardOpen={productCardOpen}
+          editVariantCardOpen={editVariantCardOpen}
+          setEditVariantCardOpen={setEditVariantCardOpen}
+          variantCardOpen={variantCardOpen}
+          setVariantCardOpen={setVariantCardOpen}
+          isFilterOpen={isFilterOpen}
+          setIsFilterOpen={setIsFilterOpen}
+          isCleared={isCleared}
+          setIsCleared={setIsCleared}
+          deleteProduct={deleteProduct}
+          setDeleteProduct={setDeleteProduct}
+          search={search}
+          setSearch={setSearch}
+          filterCount={filterCount}
+          setFilterCount={setFilterCount}
+        />
+        {productCardOpen && (
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              setProductCardOpen(false);
+            }}
+            className="fixed top-0 px-4 left-0 w-full h-full backdrop-blur-[4px] bg-black/30 flex justify-center items-center"
+          >
+            <AddProductCard setProductCardOpen={setProductCardOpen} />
+          </div>
+        )}
+      </main>
+    </>
   );
 }

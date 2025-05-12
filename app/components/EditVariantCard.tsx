@@ -309,7 +309,12 @@ function EditVariantCard({
       <CardFooter className="flex justify-end">
         <Button
           type="button"
-          disabled={size === "" || color === "" || price === ""}
+          disabled={
+            size === "" ||
+            color === "" ||
+            price === "" ||
+            Number(price) > 9999999
+          }
           onClick={(e) => {
             e.stopPropagation();
             const products:

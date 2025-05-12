@@ -350,7 +350,12 @@ function AddVariantCard({
         <Button
           type="button"
           form="addv"
-          disabled={size === "" || color === "" || price === ""}
+          disabled={
+            size === "" ||
+            color === "" ||
+            price === "" ||
+            Number(price) > 9999999
+          }
           onClick={(e) => {
             e.stopPropagation();
             const products:

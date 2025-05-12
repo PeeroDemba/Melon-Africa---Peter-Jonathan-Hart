@@ -105,11 +105,14 @@ function ProductManager({
         setFilterCount={setFilterCount}
       />
       {products === null ? (
-        <div className="text-white border border-white mt-8 border-dashed rounded-lg h-40 flex justify-center items-center">
+        <section
+          aria-label="Product Manager"
+          className="text-white border border-white mt-8 border-dashed rounded-lg h-40 flex justify-center items-center"
+        >
           <p>No products yet. Add your first product to get started.</p>
-        </div>
+        </section>
       ) : (
-        <div className="mt-8">
+        <section aria-label="Product Manager" className="mt-8">
           <div className="mt-8 flex gap-x-12 gap-y-8 flex-wrap justify-evenly">
             {products.map((e, i) => (
               <ProductCard
@@ -123,7 +126,7 @@ function ProductManager({
               />
             ))}
           </div>
-        </div>
+        </section>
       )}
     </>
   );

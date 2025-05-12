@@ -80,6 +80,7 @@ function ProductCard({
             </p>
             <Button
               variant="icon"
+              aria-label="Delete Product Button"
               onClick={() => {
                 localStorage.setItem("productIndex", String(data.id));
                 setDeleteProduct((v) => !v);
@@ -186,6 +187,7 @@ function ProductCard({
                       </div>
                       <div className="flex items-center gap-4">
                         <Button
+                          aria-label="Edit Variant Button"
                           onClick={() => {
                             setEditVariantCardOpen(() => true);
                             localStorage.setItem(
@@ -203,6 +205,7 @@ function ProductCard({
                         </Button>
                         <Button
                           variant="icon"
+                          aria-label="Delete Variant Button"
                           onClick={() => {
                             localStorage.setItem(
                               "variantIndex",

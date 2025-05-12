@@ -696,10 +696,23 @@ export function SearchAndFilterBar({
               </div>
             </CardContent>
             <CardFooter className="flex justify-end gap-4">
-              <Button variant="secondary" onClick={handleFilterReset}>
+              <Button
+                variant="secondary"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleFilterReset();
+                }}
+              >
                 Reset
               </Button>
-              <Button onClick={handleFilterApply}>Apply Filters</Button>
+              <Button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleFilterApply();
+                }}
+              >
+                Apply Filters
+              </Button>
             </CardFooter>
           </Card>
         </div>

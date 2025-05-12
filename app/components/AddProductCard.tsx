@@ -95,7 +95,7 @@ function AddProductCard({
         e.stopPropagation();
         setProductCardOpen(true);
       }}
-      className="max-w-[450px] w-full"
+      className="max-w-[450px] w-full h-[80%] overflow-y-auto"
     >
       <CardHeader>
         <CardTitle className="flex justify-between items-center">

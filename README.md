@@ -16,7 +16,7 @@ This project is built with the following technologies:
 - React Toastify
 
 - **Deployment**:
-  - Vercel
+  - [Vercel](https://melon-africa-peter-jonathan-hart.vercel.app/)
 
 ## Setup Instructions
 
@@ -65,8 +65,17 @@ Add screenshots of your application here to showcase its features and UI.
 
 _Example:_
 
-![Dashboard](path/to/dashboard-screenshot.png)
-_Dashboard view showing key metrics and navigation_
+![Home Page](https://drive.google.com/file/d/11kGLgxqibwUnlOsKRmupuIft_X3kzMg4/view?usp=drive_link)
+_Home Page view with search input, filter button and lists of products cards_
 
-![User Profile](path/to/profile-screenshot.png)
-_User profile page with account settings_
+![Add Products](https://drive.google.com/file/d/1f8REZWCAyKlNlsGS90t88GDVg04yypVu/view?usp=drive_link)
+_Add Products modal_
+
+![Filter Products](https://drive.google.com/file/d/1qLbdznFcXVu5lyDdWC38bFq32rM0neFO/view?usp=drive_link)
+_Filter Products modal_
+
+![Add Variant](https://drive.google.com/file/d/1tKZkXAd525b0sktdJF5ArLNvzKiTGB2X/view?usp=drive_link)
+_Add Variant modal_
+
+![Edit Variant](https://drive.google.com/file/d/1z365QlzWhDOqCcz4sQw2UtNGQkFNFybw/view?usp=drive_link)
+_Edit Variant modal_

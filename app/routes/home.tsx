@@ -4,7 +4,7 @@ import { Plus } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { useState } from "react";
 import AddProductCard from "~/components/AddProductCard";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 
 export function meta({}: Route.MetaArgs) {
   return [

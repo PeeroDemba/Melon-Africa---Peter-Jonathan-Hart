@@ -1,6 +1,7 @@
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -41,6 +42,62 @@ function EditVariantCard({
       | null;
   };
 }) {
+  const products:
+    | {
+        category: string;
+        description: string;
+        id: number;
+        image: string;
+        price: number;
+        rating: { rate: number; count: number };
+        title: string;
+        variants:
+          | {
+              index: number;
+              size: string;
+              color: string;
+              price: string;
+            }[]
+          | null;
+      }[]
+    | string =
+    localStorage.getItem("products") && localStorage.getItem("products") !== ""
+      ? JSON.parse(localStorage.getItem("products")!)
+      : "";
+
+  let filteredProducts: {
+    category: string;
+    description: string;
+    id: number;
+    image: string;
+    price: number;
+    rating: {
+      rate: number;
+      count: number;
+    };
+    title: string;
+    variants:
+      | {
+          index: number;
+          size: string;
+          color: string;
+          price: string;
+        }[]
+      | null;
+  }[];
+
+  if (!products || typeof products === "string") {
+    return;
+  }
+
+  filteredProducts = products.filter((e) => {
+    if (e.id === Number(localStorage.getItem("productIndex"))) {
+      return {
+        e,
+      };
+    }
+  });
+
   const { register, watch, setValue } = useForm({
     defaultValues: async () => {
       return {
@@ -94,9 +151,9 @@ function EditVariantCard({
             <X color="#ccc" />
           </Button>
         </CardTitle>
-        {/* <CardDescription className="text-[#ccc]">
-          Update variant for {data.title}.
-        </CardDescription> */}
+        <CardDescription className="text-[#ccc]">
+          Update variant for {filteredProducts[0].title}.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <form>

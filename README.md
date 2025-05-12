@@ -1,6 +1,6 @@
 # Project Name
 
-A brief description of what this project does and who it's for.
+Technical Assessment for Melon Africa
 
 ## Tech Stack
 
@@ -69,61 +69,3 @@ _Dashboard view showing key metrics and navigation_
 
 ![User Profile](path/to/profile-screenshot.png)
 _User profile page with account settings_
-
-### Video Walkthrough
-
-Create a video walkthrough of your application to demonstrate how it works.
-
-1. Record a walkthrough using [Loom](https://www.loom.com/) or your preferred screen recording tool
-2. Add the link here:
-
-[Watch the video walkthrough](https://www.loom.com/share/your-video-id)
-
-_Alternatively, you can embed the video using:_
-
-```html
-<div style="position: relative; padding-bottom: 56.25%; height: 0;">
-  <iframe
-    src="https://www.loom.com/embed/your-video-id"
-    frameborder="0"
-    webkitallowfullscreen
-    mozallowfullscreen
-    allowfullscreen
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-  >
-  </iframe>
-</div>
-```
-
-## API Documentation
-
-If your project includes an API, document the endpoints here:
-
-### Authentication
-
-#### Register a new user
-
-- **URL**: `/api/auth/register`
-- **Method**: `POST`
-- **Body**:
-
-```json
-{
-  "name": "John Doe",
-  "email": "john@example.com",
-  "password": "securepassword123"
-}
-```
-
-- **Response**:
-
-```json
-{
-  "user": {
-    "id": "user_id",
-    "name": "John Doe",
-    "email": "john@example.com"
-  },
-  "token": "jwt_token"
-}
-```

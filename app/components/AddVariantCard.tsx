@@ -1,6 +1,7 @@
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -20,16 +21,42 @@ import { Controller, useForm } from "react-hook-form";
 
 function AddVariantCard({
   setVariantCardOpen,
-  data,
 }: {
   setVariantCardOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  data: {
+}) {
+  const products:
+    | {
+        category: string;
+        description: string;
+        id: number;
+        image: string;
+        price: number;
+        rating: { rate: number; count: number };
+        title: string;
+        variants:
+          | {
+              index: number;
+              size: string;
+              color: string;
+              price: string;
+            }[]
+          | null;
+      }[]
+    | string =
+    localStorage.getItem("products") && localStorage.getItem("products") !== ""
+      ? JSON.parse(localStorage.getItem("products")!)
+      : "";
+
+  let filteredProducts: {
     category: string;
     description: string;
     id: number;
     image: string;
     price: number;
-    rating: { rate: number; count: number };
+    rating: {
+      rate: number;
+      count: number;
+    };
     title: string;
     variants:
       | {
@@ -39,8 +66,20 @@ function AddVariantCard({
           price: string;
         }[]
       | null;
-  };
-}) {
+  }[];
+
+  if (!products || typeof products === "string") {
+    return;
+  }
+
+  filteredProducts = products.filter((e) => {
+    if (e.id === Number(localStorage.getItem("productIndex"))) {
+      return {
+        e,
+      };
+    }
+  });
+
   let {
     register,
     control,
@@ -80,9 +119,9 @@ function AddVariantCard({
             <X color="#ccc" />
           </Button>
         </CardTitle>
-        {/* <CardDescription className="text-[#ccc]">
-          Add a new variant for {data.title}.
-        </CardDescription> */}
+        <CardDescription className="text-[#ccc]">
+          Add a new variant for {filteredProducts[0].title}.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <form id="addv">

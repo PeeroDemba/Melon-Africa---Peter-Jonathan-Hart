@@ -55,7 +55,7 @@ function ProductCard({
           }}
           className="fixed top-0 px-4 left-0 w-full h-full backdrop-blur-[4px] bg-black/30 flex justify-center items-center"
         >
-          <AddVariantCard data={data} setVariantCardOpen={setVariantCardOpen} />
+          <AddVariantCard setVariantCardOpen={setVariantCardOpen} />
         </div>
       )}
       {editVariantCardOpen && (

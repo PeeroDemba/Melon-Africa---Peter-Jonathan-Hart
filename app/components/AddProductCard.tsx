@@ -18,7 +18,8 @@ import {
   SelectValue,
 } from "./ui/select";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 
 function AddProductCard({
   setProductCardOpen,
@@ -67,13 +68,40 @@ function AddProductCard({
     } | null;
   } | null>(null);
 
+  const {
+    handleSubmit,
+    formState: { errors },
+    control,
+    watch,
+  } = useForm({
+    defaultValues: {
+      name: "",
+    },
+    reValidateMode: "onChange",
+  });
+
+  const name = watch("name");
+
+  useEffect(() => {
+    if (name !== "") {
+      setProduct(JSON.parse(name));
+    }
+  }, [name]);
+
   return (
-    <Card className="max-w-[450px] w-full">
+    <Card
+      onClick={(e) => {
+        e.stopPropagation();
+        setProductCardOpen(true);
+      }}
+      className="max-w-[450px] w-full"
+    >
       <CardHeader>
         <CardTitle className="flex justify-between items-center">
           <p className="text-[18px]">Add Product</p>
           <Button
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               setProductCardOpen(false);
             }}
             variant="icon"
@@ -86,55 +114,9 @@ function AddProductCard({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form>
-          <div className="grid w-full items-center gap-4">
-            <div className="flex flex-col space-y-1.5 w-full overflow-x-auto">
-              <Label htmlFor="name">Name</Label>
-              <Select
-                onValueChange={(v) => {
-                  setProduct(JSON.parse(v));
-                }}
-              >
-                <SelectTrigger id="name" className="w-full !h-10">
-                  <SelectValue placeholder="Select a product" />
-                </SelectTrigger>
-                <SelectContent
-                  position="popper"
-                  className={`bg-[#030712] ${!isLoading && "-translate-[25%]"}`}
-                >
-                  {isLoading ? (
-                    <SelectItem value="loading" disabled>
-                      Loading...
-                    </SelectItem>
-                  ) : (
-                    data?.map((e, i: number) => (
-                      <SelectItem key={i} value={JSON.stringify(e)}>
-                        {e.title}
-                      </SelectItem>
-                    ))
-                  )}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex flex-col space-y-1.5 w-full overflow-x-auto">
-              <Label htmlFor="description">Description</Label>
-              <Textarea
-                id="description"
-                disabled
-                className="placeholder:text-white"
-                placeholder={
-                  product === null
-                    ? "Brief description of the product"
-                    : product.description
-                }
-              />
-            </div>
-          </div>
-        </form>
-      </CardContent>
-      <CardFooter className="flex justify-end">
-        <Button
-          onClick={() => {
+        <form
+          id="add"
+          onSubmit={handleSubmit(() => {
             const products:
               | {
                   category: string;
@@ -173,8 +155,70 @@ function AddProductCard({
               localStorage.setItem("tempProducts", JSON.stringify([product]));
             }
             setProductCardOpen(false);
-          }}
+          })}
         >
+          <div className="grid w-full items-center gap-4">
+            <div className="flex flex-col space-y-1.5 w-full overflow-x-auto">
+              <Label htmlFor="name">Name</Label>
+              <Controller
+                control={control}
+                name="name"
+                rules={{
+                  required: {
+                    value: true,
+                    message: "Please select from the provided options above",
+                  },
+                }}
+                render={({ field }) => (
+                  <Select onValueChange={field.onChange}>
+                    <SelectTrigger id="name" className="w-full !h-10">
+                      <SelectValue placeholder="Select a product" />
+                    </SelectTrigger>
+                    <SelectContent
+                      position="popper"
+                      className={`bg-[#030712] ${
+                        !isLoading && "-translate-[25%]"
+                      }`}
+                    >
+                      {isLoading ? (
+                        <SelectItem value="loading" disabled>
+                          Loading...
+                        </SelectItem>
+                      ) : (
+                        data?.map((e, i: number) => (
+                          <SelectItem key={i} value={JSON.stringify(e)}>
+                            {e.title}
+                          </SelectItem>
+                        ))
+                      )}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+            </div>
+            {errors.name ? (
+              <p className="text-[14px] font-semibold -mt-4 text-red-600">
+                {errors.name?.message}
+              </p>
+            ) : undefined}
+            <div className="flex flex-col space-y-1.5 w-full overflow-x-auto">
+              <Label htmlFor="description">Description</Label>
+              <Textarea
+                id="description"
+                disabled
+                className="placeholder:text-white"
+                placeholder={
+                  product === null
+                    ? "Brief description of the product"
+                    : product.description
+                }
+              />
+            </div>
+          </div>
+        </form>
+      </CardContent>
+      <CardFooter className="flex justify-end">
+        <Button type="submit" form="add">
           Add Product
         </Button>
       </CardFooter>

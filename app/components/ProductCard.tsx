@@ -20,7 +20,6 @@ function ProductCard({
   setEditVariantCardOpen,
   variantCardOpen,
   setVariantCardOpen,
-
   setDeleteProduct,
 }: {
   data: {
@@ -49,12 +48,24 @@ function ProductCard({
   return (
     <>
       {variantCardOpen && (
-        <div className="fixed top-0 px-4 left-0 w-full h-full backdrop-blur-[4px] bg-black/50 flex justify-center items-center">
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            setVariantCardOpen(false);
+          }}
+          className="fixed top-0 px-4 left-0 w-full h-full backdrop-blur-[4px] bg-black/30 flex justify-center items-center"
+        >
           <AddVariantCard data={data} setVariantCardOpen={setVariantCardOpen} />
         </div>
       )}
       {editVariantCardOpen && (
-        <div className="fixed top-0 px-4 left-0 w-full h-full backdrop-blur-[4px] bg-black/50 flex justify-center items-center">
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            setEditVariantCardOpen(false);
+          }}
+          className="fixed top-0 px-4 left-0 w-full h-full backdrop-blur-[4px] bg-black/30 flex justify-center items-center"
+        >
           <EditVariantCard
             data={data}
             setEditVariantCardOpen={setEditVariantCardOpen}

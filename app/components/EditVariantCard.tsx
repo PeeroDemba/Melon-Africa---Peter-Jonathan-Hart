@@ -1,7 +1,6 @@
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -75,12 +74,19 @@ function EditVariantCard({
   const price = watch("price");
 
   return (
-    <Card className="max-w-[450px] w-full">
+    <Card
+      onClick={(e) => {
+        e.stopPropagation();
+        setEditVariantCardOpen(true);
+      }}
+      className="max-w-[450px] w-full"
+    >
       <CardHeader>
         <CardTitle className="flex justify-between items-center">
           <p className="text-[18px]">Edit Variant</p>
           <Button
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               setEditVariantCardOpen(false);
             }}
             variant="icon"
@@ -88,9 +94,9 @@ function EditVariantCard({
             <X color="#ccc" />
           </Button>
         </CardTitle>
-        <CardDescription className="text-[#ccc]">
+        {/* <CardDescription className="text-[#ccc]">
           Update variant for {data.title}.
-        </CardDescription>
+        </CardDescription> */}
       </CardHeader>
       <CardContent>
         <form>
@@ -251,7 +257,9 @@ function EditVariantCard({
       <CardFooter className="flex justify-end">
         <Button
           type="button"
-          onClick={() => {
+          disabled={size === "" || color === "" || price === ""}
+          onClick={(e) => {
+            e.stopPropagation();
             const products:
               | {
                   category: string;

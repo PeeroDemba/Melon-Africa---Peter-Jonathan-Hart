@@ -60,7 +60,13 @@ export default function Home() {
         setFilterCount={setFilterCount}
       />
       {productCardOpen && (
-        <div className="fixed top-0 px-4 left-0 w-full h-full backdrop-blur-[4px] bg-black/50 flex justify-center items-center">
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            setProductCardOpen(false);
+          }}
+          className="fixed top-0 px-4 left-0 w-full h-full backdrop-blur-[4px] bg-black/30 flex justify-center items-center"
+        >
           <AddProductCard setProductCardOpen={setProductCardOpen} />
         </div>
       )}

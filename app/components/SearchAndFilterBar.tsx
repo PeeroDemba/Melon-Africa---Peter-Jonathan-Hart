@@ -142,6 +142,9 @@ export function SearchAndFilterBar({
       JSON.stringify([...JSON.parse(localStorage.getItem("tempProducts")!)])
     );
 
+    handleSearchChange("");
+    setValue("search", "");
+
     // Only set price range if the filter is active
     if (isPriceFilterActive) {
       newFilters.priceRange = priceValues;
@@ -427,6 +430,7 @@ export function SearchAndFilterBar({
                   ...JSON.parse(localStorage.getItem("tempProducts")!),
                 ])
               );
+              handleFilterReset();
               handleSearchChange(e.currentTarget.value);
               setValue("search", e.currentTarget.value);
             }}
@@ -540,13 +544,26 @@ export function SearchAndFilterBar({
       )}
 
       {isFilterOpen && (
-        <div className="fixed top-0 px-4 left-0 w-full h-full backdrop-blur-[4px] bg-black/50 flex justify-center items-center">
-          <Card className="max-w-[450px] w-full">
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsFilterOpen(false);
+          }}
+          className="fixed top-0 px-4 left-0 w-full h-full backdrop-blur-[4px] bg-black/30 flex justify-center items-center"
+        >
+          <Card
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsFilterOpen(true);
+            }}
+            className="max-w-[450px] w-full"
+          >
             <CardHeader>
               <CardTitle className="flex justify-between items-center">
                 <p className="text-[18px]">Filter Products</p>
                 <Button
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     setIsFilterOpen(false);
                   }}
                   variant="icon"
